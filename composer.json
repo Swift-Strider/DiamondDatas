@@ -1,6 +1,7 @@
 {
     "require-dev": {
         "phpstan/phpstan": "^1.4",
-        "pocketmine/pocketmine-mp": "^4.0"
+        "pocketmine/pocketmine-mp": "^4.0",
+        "friendsofphp/php-cs-fixer": "^3.5"
     }
 }
