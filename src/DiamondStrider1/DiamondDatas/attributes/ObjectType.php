@@ -39,7 +39,7 @@ class ObjectType implements IValueType
     private ClassInfo $classInfo;
 
     /**
-     * @psalm-param class-string<T> $class
+     * @phpstan-param class-string<T> $class
      */
     public function __construct(
         private string $class,

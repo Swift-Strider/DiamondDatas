@@ -30,7 +30,7 @@ class NeoConfig
     /** @var T|null */
     private ?object $lastObject = null;
 
-    /** @psalm-param class-string<T> $class */
+    /** @phpstan-param class-string<T> $class */
     public function __construct(
         private string $filename,
         private string $class,
@@ -38,7 +38,7 @@ class NeoConfig
     }
 
     /**
-     * @psalm-return T
+     * @phpstan-return T
      */
     public function getObject(bool $reload = false): object
     {
@@ -53,7 +53,7 @@ class NeoConfig
     }
 
     /**
-     * @psalm-param T $object
+     * @phpstan-param T $object
      */
     public function setObject(object $object): void
     {

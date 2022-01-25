@@ -37,7 +37,7 @@ class ClassInfo
 
     /** 
      * @template V of object
-     * @psalm-param class-string<V> $class
+     * @phpstan-param class-string<V> $class
      * @return self<V>
      */
     public static function getInfo(string $class): self
@@ -51,7 +51,7 @@ class ClassInfo
         return $classInfo;
     }
 
-    /** @psalm-var class-string<T>[] */
+    /** @phpstan-var class-string<T>[] */
     private array $subtypes;
     /** @var array{\ReflectionProperty, IValueType}[] $props */
     private array $props = [];
@@ -60,14 +60,14 @@ class ClassInfo
     /** @var ReflectionClass<T> */
     private ReflectionClass $reflection;
 
-    /** @psalm-param class-string<T> $class */
+    /** @phpstan-param class-string<T> $class */
     private function __construct(string $class)
     {
         $this->reflection = new ReflectionClass($class);
         if ($this->reflection->isAbstract()) {
             if (!$this->reflection->implementsInterface(ISubtypeProvider::class))
                 throw new TypeError("Abstract Class does not implement ISubtypeProvider");
-            /** @psalm-var class-string<T>[] $subtypes */
+            /** @phpstan-var class-string<T>[] $subtypes */
             $subtypes = $this->reflection->getMethod("getSubtypes")->invoke(null);
             $this->subtypes = $subtypes;
             return;
@@ -105,7 +105,7 @@ class ClassInfo
         }
     }
 
-    /** @psalm-return class-string<T>[]|null */
+    /** @phpstan-return class-string<T>[]|null */
     public function getSubtypes(): ?array
     {
         return isset($this->subtypes) ? $this->subtypes : null;

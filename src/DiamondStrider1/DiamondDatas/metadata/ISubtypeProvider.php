@@ -22,6 +22,6 @@ namespace DiamondStrider1\DiamondDatas\metadata;
 
 interface ISubtypeProvider
 {
-    /** @psalm-return array<string, class-string<static>> */
+    /** @phpstan-return array<string, class-string<static>> */
     public static function getSubtypes(): array;
 }
