@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace DiamondStrider1\DiamondDatas\metadata;
 
 use DiamondStrider1\DiamondDatas\ConfigContext;
+use DiamondStrider1\DiamondDatas\ConfigException;
 
 interface IValidationProvider
 {
