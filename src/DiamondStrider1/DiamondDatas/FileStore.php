@@ -54,7 +54,9 @@ class FileStore
 
         $entries = [];
         while (($e = $dir->read()) !== false) {
-            if ($e === "." || $e === "..") continue;
+            if ($e === "." || $e === "..") {
+                continue;
+            }
             $entries[] = $e;
         }
         return $entries;
@@ -82,12 +84,16 @@ class FileStore
     private static function recursiveCopy(string $src, string $dst): void
     {
         $dir = dir($src);
-        if ($dir === false) return;
+        if ($dir === false) {
+            return;
+        }
         if (!file_exists($dst)) {
             mkdir($dst);
         }
         while (($e = $dir->read()) !== false) {
-            if ($e === "." || $e === "..") continue;
+            if ($e === "." || $e === "..") {
+                continue;
+            }
             $file = $src . "/" . $e;
             if (is_dir($file) && !is_link($file)) {
                 self::recursiveCopy($file, $dst . "/" . $e);
@@ -114,9 +120,13 @@ class FileStore
     private static function recursiveDelete(string $folder): void
     {
         $files = scandir($folder);
-        if ($files === false) return;
+        if ($files === false) {
+            return;
+        }
         foreach ($files as $e) {
-            if ($e === "." || $e === "..") continue;
+            if ($e === "." || $e === "..") {
+                continue;
+            }
             $file = $folder . "/" . $e;
             if (is_dir($file) && !is_link($file)) {
                 self::recursiveDelete($file);

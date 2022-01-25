@@ -48,7 +48,9 @@ class IntType implements IValueType
 
     public function shortString(mixed $value): string
     {
-        if (!is_int($value)) return "NOT SET";
+        if (!is_int($value)) {
+            return "NOT SET";
+        }
         return "$value";
     }
 
@@ -59,7 +61,9 @@ class IntType implements IValueType
 
     public function fromRaw(mixed $raw, ConfigContext $context): mixed
     {
-        if (!is_int($raw)) throw new ConfigException("Expected integer", $context);
+        if (!is_int($raw)) {
+            throw new ConfigException("Expected integer", $context);
+        }
         return $raw;
     }
 }

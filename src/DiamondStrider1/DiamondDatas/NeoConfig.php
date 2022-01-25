@@ -65,7 +65,9 @@ class NeoConfig
 
     public function deleteFile(): void
     {
-        if (!file_exists($this->filename)) return;
+        if (!file_exists($this->filename)) {
+            return;
+        }
         unlink($this->filename);
     }
 

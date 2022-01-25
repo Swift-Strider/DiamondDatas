@@ -48,7 +48,9 @@ class StringType implements IValueType
 
     public function shortString(mixed $value): string
     {
-        if (!is_string($value)) return "NOT SET";
+        if (!is_string($value)) {
+            return "NOT SET";
+        }
         return "\"$value\"";
     }
 
@@ -60,7 +62,9 @@ class StringType implements IValueType
 
     public function fromRaw(mixed $raw, ConfigContext $context): mixed
     {
-        if (!is_string($raw)) throw new ConfigException("Expected string", $context);
+        if (!is_string($raw)) {
+            throw new ConfigException("Expected string", $context);
+        }
         return $raw;
     }
 }

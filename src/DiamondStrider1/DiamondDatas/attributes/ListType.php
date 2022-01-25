@@ -58,14 +58,17 @@ class ListType implements IValueType
 
     public function shortString(mixed $value): string
     {
-        if (!is_array($value)) return "NOT SET";
+        if (!is_array($value)) {
+            return "NOT SET";
+        }
         return "List [...]";
     }
 
     public function yamlLines(mixed $value, ConfigContext $context): string
     {
-        if (!(is_array($value) && array_values($value) === $value))
+        if (!(is_array($value) && array_values($value) === $value)) {
             throw new TypeError("\$value must be an array-list");
+        }
         $lines = "\n";
         foreach ($value as $i => $v) {
             $newContext = $context->addKey($i);
@@ -73,13 +76,17 @@ class ListType implements IValueType
             $padding = str_repeat("  ", $context->getDepth());
             $lines .= "$padding - $valueLines\n";
         }
-        if ($lines === "\n") return "[]";
+        if ($lines === "\n") {
+            return "[]";
+        }
         return $lines;
     }
 
     public function fromRaw(mixed $raw, ConfigContext $context): mixed
     {
-        if (!is_array($raw)) throw new ConfigException("Expected key pair values", $context);
+        if (!is_array($raw)) {
+            throw new ConfigException("Expected key pair values", $context);
+        }
         /** @var array<int, T> */
         $array = [];
         foreach ($raw as $i => $value) {

@@ -50,21 +50,25 @@ class VectorType implements IValueType
 
     public function shortString(mixed $value): string
     {
-        if (!($value instanceof Vector3)) return "NOT SET";
+        if (!($value instanceof Vector3)) {
+            return "NOT SET";
+        }
         return sprintf("(x: %.2f, y: %.2f, z: %.2f)", $value->x, $value->y, $value->z);
     }
 
     public function yamlLines(mixed $value, ConfigContext $context): string
     {
-        if (!($value instanceof Vector3))
+        if (!($value instanceof Vector3)) {
             throw new TypeError("\$value is not a Vector3");
+        }
         return sprintf("[%.6f, %.6f, %.6f]", $value->x, $value->y, $value->z);
     }
 
     public function fromRaw(mixed $raw, ConfigContext $context): mixed
     {
-        if (!is_array($raw) || count($raw) < 3)
+        if (!is_array($raw) || count($raw) < 3) {
             throw new ConfigException("Expected Vector3 (list of 3 numbers)", $context);
+        }
         return new Vector3((float) $raw[0], (float) $raw[1], (float) $raw[2]);
     }
 }

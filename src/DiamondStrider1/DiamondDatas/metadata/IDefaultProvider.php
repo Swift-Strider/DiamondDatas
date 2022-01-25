@@ -28,10 +28,10 @@ interface IDefaultProvider
     /**
      * @return array<string, mixed>
      * config-key => value
-     * 
+     *
      * The values this function returns must be
      * fully parsed.
-     * 
+     *
      * Ex: The defaults in yaml
      * ```yaml
      * position: [0, 2, 4]

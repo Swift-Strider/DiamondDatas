@@ -35,7 +35,7 @@ class ClassInfo
     /** @var self[] */
     private static array $cache = [];
 
-    /** 
+    /**
      * @template V of object
      * @phpstan-param class-string<V> $class
      * @return self<V>
@@ -65,15 +65,18 @@ class ClassInfo
     {
         $this->reflection = new ReflectionClass($class);
         if ($this->reflection->isAbstract()) {
-            if (!$this->reflection->implementsInterface(ISubtypeProvider::class))
+            if (!$this->reflection->implementsInterface(ISubtypeProvider::class)) {
                 throw new TypeError("Abstract Class does not implement ISubtypeProvider");
+            }
             /** @phpstan-var class-string<T>[] $subtypes */
             $subtypes = $this->reflection->getMethod("getSubtypes")->invoke(null);
             $this->subtypes = $subtypes;
             return;
         }
         foreach ($this->reflection->getProperties() as $rProp) {
-            if ($rProp->isStatic()) continue;
+            if ($rProp->isStatic()) {
+                continue;
+            }
             $inject = null;
             foreach ($rProp->getAttributes() as $attr) {
                 $rAttr = new ReflectionClass($attr->getName());
@@ -94,7 +97,9 @@ class ClassInfo
                     break;
                 }
             }
-            if ($inject === null) continue;
+            if ($inject === null) {
+                continue;
+            }
             /** @var IValueType $inject */
             $this->props[] = [$rProp, $inject];
         }
@@ -125,7 +130,9 @@ class ClassInfo
 
     public function isInstanceOf(mixed $value): bool
     {
-        if (!is_object($value)) return false;
+        if (!is_object($value)) {
+            return false;
+        }
         return $this->reflection->isInstance($value);
     }
 }
