@@ -6,7 +6,7 @@
     {
       "label": "phpstan",
       "type": "shell",
-      "command": "./vendor/bin/phpstan analyze src",
+      "command": "./vendor/bin/phpstan analyze --level 9 src",
       "group": "build"
     },
     {
