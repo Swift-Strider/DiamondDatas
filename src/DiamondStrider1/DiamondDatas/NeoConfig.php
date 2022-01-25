@@ -38,7 +38,7 @@ class NeoConfig
     }
 
     /**
-     * @return T
+     * @psalm-return T
      */
     public function getObject(bool $reload = false): object
     {
@@ -53,7 +53,7 @@ class NeoConfig
     }
 
     /**
-     * @param T $object
+     * @psalm-param T $object
      */
     public function setObject(object $object): void
     {
