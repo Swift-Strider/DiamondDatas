@@ -48,7 +48,7 @@ class BoolType implements IValueType
 
     public function shortString(mixed $value): string
     {
-        if (!is_bool($value)) {
+        if (!\is_bool($value)) {
             return "NOT SET";
         }
         return $value ? "ENABLED" : "DISABLED";
@@ -61,7 +61,7 @@ class BoolType implements IValueType
 
     public function fromRaw(mixed $raw, ConfigContext $context): mixed
     {
-        if (!is_bool($raw)) {
+        if (!\is_bool($raw)) {
             throw new ConfigException("Expected boolean", $context);
         }
         return $raw;

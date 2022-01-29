@@ -58,7 +58,7 @@ class ListType implements IValueType
 
     public function shortString(mixed $value): string
     {
-        if (!is_array($value)) {
+        if (!\is_array($value)) {
             return "NOT SET";
         }
         return "List [...]";
@@ -66,7 +66,7 @@ class ListType implements IValueType
 
     public function yamlLines(mixed $value, ConfigContext $context): string
     {
-        if (!(is_array($value) && array_values($value) === $value)) {
+        if (!(\is_array($value) && array_values($value) === $value)) {
             throw new TypeError("\$value must be an array-list");
         }
         $lines = "\n";
@@ -84,7 +84,7 @@ class ListType implements IValueType
 
     public function fromRaw(mixed $raw, ConfigContext $context): mixed
     {
-        if (!is_array($raw)) {
+        if (!\is_array($raw)) {
             throw new ConfigException("Expected key pair values", $context);
         }
         /** @var array<int, T> */

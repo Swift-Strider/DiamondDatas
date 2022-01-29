@@ -89,7 +89,7 @@ class NeoConfig
         }
 
         $saveData = yaml_parse($contents) ?? []; // Empty file defaults to empty array
-        if (!is_array($saveData)) {
+        if (!\is_array($saveData)) {
             throw new ConfigException("Settings must be in key-value pairs", $context);
         }
 

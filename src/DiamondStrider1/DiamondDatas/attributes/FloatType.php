@@ -48,7 +48,7 @@ class FloatType implements IValueType
 
     public function shortString(mixed $value): string
     {
-        if (!is_float($value)) {
+        if (!\is_float($value)) {
             return "NOT SET";
         }
         return "$value";
@@ -61,7 +61,7 @@ class FloatType implements IValueType
 
     public function fromRaw(mixed $raw, ConfigContext $context): mixed
     {
-        if (!is_float($raw)) {
+        if (!\is_float($raw)) {
             throw new ConfigException("Expected float", $context);
         }
         return $raw;

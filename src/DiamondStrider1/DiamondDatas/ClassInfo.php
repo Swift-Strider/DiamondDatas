@@ -130,7 +130,7 @@ class ClassInfo
 
     public function isInstanceOf(mixed $value): bool
     {
-        if (!is_object($value)) {
+        if (!\is_object($value)) {
             return false;
         }
         return $this->reflection->isInstance($value);

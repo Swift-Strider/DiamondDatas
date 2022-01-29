@@ -32,7 +32,7 @@ class ConfigContext
 
     public function addKey(string|int $key): self
     {
-        if (is_int($key)) {
+        if (\is_int($key)) {
             $key = "[$key]";
         } else {
             $key = ".$key";

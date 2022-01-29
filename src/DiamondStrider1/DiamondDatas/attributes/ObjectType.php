@@ -61,10 +61,10 @@ class ObjectType implements IValueType
 
     public function shortString(mixed $value): string
     {
-        if (!is_object($value)) {
+        if (!\is_object($value)) {
             return "NOT SET";
         }
-        $class = get_class($value);
+        $class = \get_class($value);
 
         $slashPos = strrpos($class, "\\", -1);
         $shortClass = substr($class, $slashPos !== false ? $slashPos + 1 : 0);
@@ -74,13 +74,13 @@ class ObjectType implements IValueType
 
     public function yamlLines(mixed $value, ConfigContext $context): string
     {
-        if (!is_object($value)) {
+        if (!\is_object($value)) {
             throw new TypeError("\$value must be an object.");
         }
         $padding = str_repeat("  ", $context->getDepth());
-        $props = ClassInfo::getInfo(get_class($value))->getProps();
+        $props = ClassInfo::getInfo(\get_class($value))->getProps();
 
-        if (count($props) === 0 && $context->getDepth() !== 0) {
+        if (\count($props) === 0 && $context->getDepth() !== 0) {
             $lines = "[]";
         } else {
             $lines = $context->getDepth() === 0 ? "" : "\n";
@@ -88,10 +88,10 @@ class ObjectType implements IValueType
 
         $subtypes = $this->classInfo->getSubtypes();
         if ($subtypes !== null) {
-            $value_class = get_class($value);
+            $value_class = \get_class($value);
             $subtype = null;
             foreach ($subtypes as $name => $class) {
-                if ($class == $value_class) {
+                if ($class === $value_class) {
                     $subtype = $name;
                 }
             }
@@ -100,7 +100,7 @@ class ObjectType implements IValueType
             }
             $lines = "\n{$padding}# valid subtypes are: " . implode(', ', array_keys($subtypes)) . "\n";
             $lines .= "{$padding}subtype: $subtype\n";
-            $lines .= "{$padding}options: " . (count($props) > 0 ? "\n" : "[]");
+            $lines .= "{$padding}options: " . (\count($props) > 0 ? "\n" : "[]");
             $padding .= "  ";
             $context = $context->addKey("options");
         }
@@ -122,7 +122,7 @@ class ObjectType implements IValueType
 
     public function fromRaw(mixed $raw, ConfigContext $context): mixed
     {
-        if (!is_array($raw)) {
+        if (!\is_array($raw)) {
             throw new ConfigException("Expected key pair values", $context);
         }
         if (($subs = $this->classInfo->getSubtypes()) !== null) {
@@ -136,7 +136,7 @@ class ObjectType implements IValueType
                 );
             }
 
-            return (new ObjectType($sub))->fromRaw($raw["options"], $context->addKey("options"));
+            return (new self($sub))->fromRaw($raw["options"], $context->addKey("options"));
         }
         $object = new $this->class();
         foreach ($this->classInfo->getProps() as [$rProp, $inject]) {

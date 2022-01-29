@@ -66,7 +66,7 @@ class VectorType implements IValueType
 
     public function fromRaw(mixed $raw, ConfigContext $context): mixed
     {
-        if (!is_array($raw) || count($raw) < 3) {
+        if (!\is_array($raw) || \count($raw) < 3) {
             throw new ConfigException("Expected Vector3 (list of 3 numbers)", $context);
         }
         return new Vector3((float) $raw[0], (float) $raw[1], (float) $raw[2]);

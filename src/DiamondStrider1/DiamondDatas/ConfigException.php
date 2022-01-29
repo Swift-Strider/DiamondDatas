@@ -35,7 +35,7 @@ class ConfigException extends Exception
         $message = "$dashes ConfigException: $message $dashes";
 
         if ($context) {
-            $headerLen = strlen($message);
+            $headerLen = \strlen($message);
             $file = $context->getFile();
             $prettyFile = "<pocketmine_server>" . substr($file, strrpos($file, "plugin_data", -1) - 1);
             $message .= "\n  Error in file \"$prettyFile\"\n";
