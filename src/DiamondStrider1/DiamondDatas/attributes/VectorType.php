@@ -10,10 +10,11 @@
  * php version 8.0.13
  *
  * @category Annotations
- * @package  DiamondDatas
+ *
  * @author   DiamondStrider1 <62265561+Swift-Strider@users.noreply.github.com>
  * @license  The Unlicense
- * @link     https://github.com/Swift-Strider/DiamondVirions
+ *
+ * @see     https://github.com/Swift-Strider/DiamondVirions
  */
 
 declare(strict_types=1);
@@ -33,8 +34,8 @@ use TypeError;
 class VectorType implements IValueType
 {
     public function __construct(
-        private string $config_key = "",
-        private string $description = ""
+        private string $config_key = '',
+        private string $description = ''
     ) {
     }
 
@@ -51,24 +52,27 @@ class VectorType implements IValueType
     public function shortString(mixed $value): string
     {
         if (!($value instanceof Vector3)) {
-            return "NOT SET";
+            return 'NOT SET';
         }
-        return sprintf("(x: %.2f, y: %.2f, z: %.2f)", $value->x, $value->y, $value->z);
+
+        return sprintf('(x: %.2f, y: %.2f, z: %.2f)', $value->x, $value->y, $value->z);
     }
 
     public function yamlLines(mixed $value, ConfigContext $context): string
     {
         if (!($value instanceof Vector3)) {
-            throw new TypeError("\$value is not a Vector3");
+            throw new TypeError('$value is not a Vector3');
         }
-        return sprintf("[%.6f, %.6f, %.6f]", $value->x, $value->y, $value->z);
+
+        return sprintf('[%.6f, %.6f, %.6f]', $value->x, $value->y, $value->z);
     }
 
     public function fromRaw(mixed $raw, ConfigContext $context): mixed
     {
         if (!\is_array($raw) || \count($raw) < 3) {
-            throw new ConfigException("Expected Vector3 (list of 3 numbers)", $context);
+            throw new ConfigException('Expected Vector3 (list of 3 numbers)', $context);
         }
+
         return new Vector3((float) $raw[0], (float) $raw[1], (float) $raw[2]);
     }
 }

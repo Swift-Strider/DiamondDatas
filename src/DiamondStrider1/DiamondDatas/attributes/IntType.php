@@ -10,10 +10,11 @@
  * php version 8.0.13
  *
  * @category Annotations
- * @package  DiamondDatas
+ *
  * @author   DiamondStrider1 <62265561+Swift-Strider@users.noreply.github.com>
  * @license  The Unlicense
- * @link     https://github.com/Swift-Strider/DiamondVirions
+ *
+ * @see     https://github.com/Swift-Strider/DiamondVirions
  */
 
 declare(strict_types=1);
@@ -31,8 +32,8 @@ use DiamondStrider1\DiamondDatas\ConfigException;
 class IntType implements IValueType
 {
     public function __construct(
-        private string $config_key = "",
-        private string $description = ""
+        private string $config_key = '',
+        private string $description = ''
     ) {
     }
 
@@ -49,9 +50,10 @@ class IntType implements IValueType
     public function shortString(mixed $value): string
     {
         if (!\is_int($value)) {
-            return "NOT SET";
+            return 'NOT SET';
         }
-        return "$value";
+
+        return "{$value}";
     }
 
     public function yamlLines(mixed $value, ConfigContext $context): string
@@ -62,8 +64,9 @@ class IntType implements IValueType
     public function fromRaw(mixed $raw, ConfigContext $context): mixed
     {
         if (!\is_int($raw)) {
-            throw new ConfigException("Expected integer", $context);
+            throw new ConfigException('Expected integer', $context);
         }
+
         return $raw;
     }
 }

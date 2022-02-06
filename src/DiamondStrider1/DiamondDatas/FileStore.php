@@ -10,10 +10,11 @@
  * php version 8.0.13
  *
  * @category API
- * @package  DiamondDatas
+ *
  * @author   DiamondStrider1 <62265561+Swift-Strider@users.noreply.github.com>
  * @license  The Unlicense
- * @link     https://github.com/Swift-Strider/DiamondVirions
+ *
+ * @see     https://github.com/Swift-Strider/DiamondVirions
  */
 
 declare(strict_types=1);
@@ -45,35 +46,36 @@ class FileStore
             @mkdir($this->foldername);
         }
         if (!is_dir($this->foldername)) {
-            throw new ConfigException("There is a file instead of a folder at `" . $this->foldername . "`");
+            throw new ConfigException('There is a file instead of a folder at `'.$this->foldername.'`');
         }
         $dir = dir($this->foldername);
-        if ($dir === false) {
-            throw new ConfigException("Cannot read directory `" . $this->foldername . "`");
+        if (false === $dir) {
+            throw new ConfigException('Cannot read directory `'.$this->foldername.'`');
         }
 
         $entries = [];
         while (($e = $dir->read()) !== false) {
-            if ($e === "." || $e === "..") {
+            if ('.' === $e || '..' === $e) {
                 continue;
             }
             $entries[] = $e;
         }
+
         return $entries;
     }
 
     public function saveFile(string $fileToCopy, string $newEntryName): void
     {
         if (is_dir($fileToCopy)) {
-            self::recursiveCopy($fileToCopy, $this->foldername . '/' . $newEntryName);
+            self::recursiveCopy($fileToCopy, $this->foldername.'/'.$newEntryName);
         } else {
-            copy($fileToCopy, $this->foldername . '/' . $newEntryName);
+            copy($fileToCopy, $this->foldername.'/'.$newEntryName);
         }
     }
 
     public function loadFile(string $entryName, string $pathToCopyTo): void
     {
-        $entryFile = $this->foldername . '/' . $entryName;
+        $entryFile = $this->foldername.'/'.$entryName;
         if (is_dir($entryFile)) {
             self::recursiveCopy($entryFile, $pathToCopyTo);
         } else {
@@ -81,31 +83,9 @@ class FileStore
         }
     }
 
-    private static function recursiveCopy(string $src, string $dst): void
-    {
-        $dir = dir($src);
-        if ($dir === false) {
-            return;
-        }
-        if (!file_exists($dst)) {
-            mkdir($dst);
-        }
-        while (($e = $dir->read()) !== false) {
-            if ($e === "." || $e === "..") {
-                continue;
-            }
-            $file = $src . "/" . $e;
-            if (is_dir($file) && !is_link($file)) {
-                self::recursiveCopy($file, $dst . "/" . $e);
-            } else {
-                copy($file, $dst . '/' . $e);
-            }
-        }
-    }
-
     public function remove(string $entryName): void
     {
-        $file = $this->foldername . '/' . $entryName;
+        $file = $this->foldername.'/'.$entryName;
         if (!file_exists($file)) {
             return;
         }
@@ -117,17 +97,39 @@ class FileStore
         }
     }
 
+    private static function recursiveCopy(string $src, string $dst): void
+    {
+        $dir = dir($src);
+        if (false === $dir) {
+            return;
+        }
+        if (!file_exists($dst)) {
+            mkdir($dst);
+        }
+        while (($e = $dir->read()) !== false) {
+            if ('.' === $e || '..' === $e) {
+                continue;
+            }
+            $file = $src.'/'.$e;
+            if (is_dir($file) && !is_link($file)) {
+                self::recursiveCopy($file, $dst.'/'.$e);
+            } else {
+                copy($file, $dst.'/'.$e);
+            }
+        }
+    }
+
     private static function recursiveDelete(string $folder): void
     {
         $files = scandir($folder);
-        if ($files === false) {
+        if (false === $files) {
             return;
         }
         foreach ($files as $e) {
-            if ($e === "." || $e === "..") {
+            if ('.' === $e || '..' === $e) {
                 continue;
             }
-            $file = $folder . "/" . $e;
+            $file = $folder.'/'.$e;
             if (is_dir($file) && !is_link($file)) {
                 self::recursiveDelete($file);
             } else {

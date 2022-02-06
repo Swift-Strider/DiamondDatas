@@ -10,10 +10,11 @@
  * php version 8.0.13
  *
  * @category Annotations
- * @package  DiamondDatas
+ *
  * @author   DiamondStrider1 <62265561+Swift-Strider@users.noreply.github.com>
  * @license  The Unlicense
- * @link     https://github.com/Swift-Strider/DiamondVirions
+ *
+ * @see     https://github.com/Swift-Strider/DiamondVirions
  */
 
 declare(strict_types=1);
@@ -43,8 +44,8 @@ class ObjectType implements IValueType
      */
     public function __construct(
         private string $class,
-        private string $config_key = "<root>",
-        private string $description = ""
+        private string $config_key = '<root>',
+        private string $description = ''
     ) {
         $this->classInfo = ClassInfo::getInfo($class);
     }
@@ -62,32 +63,33 @@ class ObjectType implements IValueType
     public function shortString(mixed $value): string
     {
         if (!\is_object($value)) {
-            return "NOT SET";
+            return 'NOT SET';
         }
         $class = \get_class($value);
 
-        $slashPos = strrpos($class, "\\", -1);
-        $shortClass = substr($class, $slashPos !== false ? $slashPos + 1 : 0);
+        $slashPos = strrpos($class, '\\', -1);
+        $shortClass = substr($class, false !== $slashPos ? $slashPos + 1 : 0);
         $prettyClass = ucfirst($shortClass);
+
         return "{$prettyClass} {...}";
     }
 
     public function yamlLines(mixed $value, ConfigContext $context): string
     {
         if (!\is_object($value)) {
-            throw new TypeError("\$value must be an object.");
+            throw new TypeError('$value must be an object.');
         }
-        $padding = str_repeat("  ", $context->getDepth());
+        $padding = str_repeat('  ', $context->getDepth());
         $props = ClassInfo::getInfo(\get_class($value))->getProps();
 
-        if (\count($props) === 0 && $context->getDepth() !== 0) {
-            $lines = "[]";
+        if (0 === \count($props) && 0 !== $context->getDepth()) {
+            $lines = '[]';
         } else {
-            $lines = $context->getDepth() === 0 ? "" : "\n";
+            $lines = 0 === $context->getDepth() ? '' : "\n";
         }
 
         $subtypes = $this->classInfo->getSubtypes();
-        if ($subtypes !== null) {
+        if (null !== $subtypes) {
             $value_class = \get_class($value);
             $subtype = null;
             foreach ($subtypes as $name => $class) {
@@ -96,13 +98,13 @@ class ObjectType implements IValueType
                 }
             }
             if (!$subtype) {
-                throw new TypeError("No \$subtype found");
+                throw new TypeError('No $subtype found');
             }
-            $lines = "\n{$padding}# valid subtypes are: " . implode(', ', array_keys($subtypes)) . "\n";
-            $lines .= "{$padding}subtype: $subtype\n";
-            $lines .= "{$padding}options: " . (\count($props) > 0 ? "\n" : "[]");
-            $padding .= "  ";
-            $context = $context->addKey("options");
+            $lines = "\n{$padding}# valid subtypes are: ".implode(', ', array_keys($subtypes))."\n";
+            $lines .= "{$padding}subtype: {$subtype}\n";
+            $lines .= "{$padding}options: ".(\count($props) > 0 ? "\n" : '[]');
+            $padding .= '  ';
+            $context = $context->addKey('options');
         }
 
         foreach ($props as [$rProp, $inject]) {
@@ -112,9 +114,9 @@ class ObjectType implements IValueType
             $valueLines = rtrim($inject->yamlLines($rProp->getValue($value), $newContext));
 
             foreach (explode("\n", $inject->getDescription()) as $descLine) {
-                $lines .= "$padding# $descLine\n";
+                $lines .= "{$padding}# {$descLine}\n";
             }
-            $lines .= "$padding{$inject->getKey()}: $valueLines\n";
+            $lines .= "{$padding}{$inject->getKey()}: {$valueLines}\n";
         }
 
         return $lines;
@@ -123,24 +125,24 @@ class ObjectType implements IValueType
     public function fromRaw(mixed $raw, ConfigContext $context): mixed
     {
         if (!\is_array($raw)) {
-            throw new ConfigException("Expected key pair values", $context);
+            throw new ConfigException('Expected key pair values', $context);
         }
         if (($subs = $this->classInfo->getSubtypes()) !== null) {
-            if (!isset($raw["subtype"]) || !isset($raw["options"])) {
-                throw new ConfigException("Expected keys \"subtype\" and \"options\"", $context);
+            if (!isset($raw['subtype']) || !isset($raw['options'])) {
+                throw new ConfigException('Expected keys "subtype" and "options"', $context);
             }
-            if (($sub = $subs[$raw["subtype"]] ?? null) === null) {
+            if (($sub = $subs[$raw['subtype']] ?? null) === null) {
                 throw new ConfigException(
-                    "Unknown \"subtype\"; Accepted are: " . implode(", ", array_keys($subs)),
+                    'Unknown "subtype"; Accepted are: '.implode(', ', array_keys($subs)),
                     $context
                 );
             }
 
-            return (new self($sub))->fromRaw($raw["options"], $context->addKey("options"));
+            return (new self($sub))->fromRaw($raw['options'], $context->addKey('options'));
         }
         $object = new $this->class();
         foreach ($this->classInfo->getProps() as [$rProp, $inject]) {
-            /** @var ReflectionProperty $rProp */
+            // @var ReflectionProperty $rProp
             /** @var IValueType $inject */
             if (($propValue = $raw[$inject->getKey()] ?? null) === null) {
                 if (($defaults = $this->classInfo->getDefaults()) === null) {
@@ -158,7 +160,7 @@ class ObjectType implements IValueType
         if ($object instanceof IValidationProvider) {
             $object->validate($context);
         }
-        /** @var T $object */
+        // @var T $object
         return $object;
     }
 }

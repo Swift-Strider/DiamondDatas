@@ -10,20 +10,21 @@
  * php version 8.0.13
  *
  * @category Internal
- * @package  DiamondDatas
+ *
  * @author   DiamondStrider1 <62265561+Swift-Strider@users.noreply.github.com>
  * @license  The Unlicense
- * @link     https://github.com/Swift-Strider/DiamondVirions
+ *
+ * @see     https://github.com/Swift-Strider/DiamondVirions
  */
 
 declare(strict_types=1);
 
 namespace DiamondStrider1\DiamondDatas;
 
-use DiamondStrider1\DiamondDatas\metadata\IDefaultProvider;
-use DiamondStrider1\DiamondDatas\metadata\ISubtypeProvider;
 use DiamondStrider1\DiamondDatas\attributes\IValueType;
 use DiamondStrider1\DiamondDatas\attributes\ListType;
+use DiamondStrider1\DiamondDatas\metadata\IDefaultProvider;
+use DiamondStrider1\DiamondDatas\metadata\ISubtypeProvider;
 use ReflectionClass;
 use TypeError;
 
@@ -35,28 +36,15 @@ class ClassInfo
     /** @var self[] */
     private static array $cache = [];
 
-    /**
-     * @template V of object
-     * @phpstan-param class-string<V> $class
-     * @return self<V>
-     */
-    public static function getInfo(string $class): self
-    {
-        if (isset(self::$cache[$class])) {
-            $classInfo = self::$cache[$class];
-        } else {
-            $classInfo = self::$cache[$class] = new self($class);
-        }
-        /** @var self<V> $classInfo */
-        return $classInfo;
-    }
-
     /** @phpstan-var class-string<T>[] */
     private array $subtypes;
-    /** @var array{\ReflectionProperty, IValueType}[] $props */
+
+    /** @var array{\ReflectionProperty, IValueType}[] */
     private array $props = [];
+
     /** @var array<string, mixed> */
     private array $defaults;
+
     /** @var ReflectionClass<T> */
     private ReflectionClass $reflection;
 
@@ -66,11 +54,13 @@ class ClassInfo
         $this->reflection = new ReflectionClass($class);
         if ($this->reflection->isAbstract()) {
             if (!$this->reflection->implementsInterface(ISubtypeProvider::class)) {
-                throw new TypeError("Abstract Class does not implement ISubtypeProvider");
+                throw new TypeError('Abstract Class does not implement ISubtypeProvider');
             }
+
             /** @phpstan-var class-string<T>[] $subtypes */
-            $subtypes = $this->reflection->getMethod("getSubtypes")->invoke(null);
+            $subtypes = $this->reflection->getMethod('getSubtypes')->invoke(null);
             $this->subtypes = $subtypes;
+
             return;
         }
         foreach ($this->reflection->getProperties() as $rProp) {
@@ -81,33 +71,51 @@ class ClassInfo
             foreach ($rProp->getAttributes() as $attr) {
                 $rAttr = new ReflectionClass($attr->getName());
                 if (
-                    $rAttr->isSubclassOf(IValueType::class) &&
-                    $rAttr->getName() !== ListType::class
+                    $rAttr->isSubclassOf(IValueType::class)
+                    && ListType::class !== $rAttr->getName()
                 ) {
                     $listType = $rProp->getAttributes(ListType::class)[0] ?? null;
                     if ($listType) {
                         /** @var IValueType $other */
                         $other = $attr->newInstance();
                         $inject = $listType->newInstance();
-                        /** @var ListType $inject */
+                        // @var ListType $inject
                         $inject->setType($other);
                     } else {
                         $inject = $attr->newInstance();
                     }
+
                     break;
                 }
             }
-            if ($inject === null) {
+            if (null === $inject) {
                 continue;
             }
-            /** @var IValueType $inject */
+            // @var IValueType $inject
             $this->props[] = [$rProp, $inject];
         }
         if ($this->reflection->implementsInterface(IDefaultProvider::class)) {
             /** @var array<string, mixed> $defaults */
-            $defaults = $this->reflection->getMethod("getDefaults")->invoke(null);
+            $defaults = $this->reflection->getMethod('getDefaults')->invoke(null);
             $this->defaults = $defaults;
         }
+    }
+
+    /**
+     * @template V of object
+     * @phpstan-param class-string<V> $class
+     *
+     * @return self<V>
+     */
+    public static function getInfo(string $class): self
+    {
+        if (isset(self::$cache[$class])) {
+            $classInfo = self::$cache[$class];
+        } else {
+            $classInfo = self::$cache[$class] = new self($class);
+        }
+        // @var self<V> $classInfo
+        return $classInfo;
     }
 
     /** @phpstan-return class-string<T>[]|null */
@@ -122,7 +130,7 @@ class ClassInfo
         return $this->props;
     }
 
-    /** @return array<string, mixed>|null */
+    /** @return null|array<string, mixed> */
     public function getDefaults(): ?array
     {
         return isset($this->defaults) ? $this->defaults : null;
@@ -133,6 +141,7 @@ class ClassInfo
         if (!\is_object($value)) {
             return false;
         }
+
         return $this->reflection->isInstance($value);
     }
 }

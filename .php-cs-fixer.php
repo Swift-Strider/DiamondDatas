@@ -5,6 +5,7 @@ $finder = PhpCsFixer\Finder::create()
 
 $config = new PhpCsFixer\Config();
 return $config->setRules([
+    '@PhpCsFixer' => true,
     '@PhpCsFixer:risky' => true,
 ])
     ->setRiskyAllowed(true)

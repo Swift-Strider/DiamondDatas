@@ -10,10 +10,11 @@
  * php version 8.0.13
  *
  * @category API
- * @package  DiamondDatas
+ *
  * @author   DiamondStrider1 <62265561+Swift-Strider@users.noreply.github.com>
  * @license  The Unlicense
- * @link     https://github.com/Swift-Strider/DiamondVirions
+ *
+ * @see     https://github.com/Swift-Strider/DiamondVirions
  */
 
 declare(strict_types=1);
@@ -27,7 +28,7 @@ use DiamondStrider1\DiamondDatas\attributes\ObjectType;
  */
 class NeoConfig
 {
-    /** @var T|null */
+    /** @var null|T */
     private ?object $lastObject = null;
 
     /** @phpstan-param class-string<T> $class */
@@ -49,6 +50,7 @@ class NeoConfig
         $context = new ConfigContext($this->filename);
         $object = (new ObjectType($this->class))->fromRaw($this->fetchData(), $context);
         $this->setObject($object);
+
         return $object;
     }
 
@@ -84,13 +86,13 @@ class NeoConfig
         }
 
         $contents = file_get_contents($this->filename);
-        if ($contents === false) {
-            throw new ConfigException("Could not load settings", $context);
+        if (false === $contents) {
+            throw new ConfigException('Could not load settings', $context);
         }
 
         $saveData = yaml_parse($contents) ?? []; // Empty file defaults to empty array
         if (!\is_array($saveData)) {
-            throw new ConfigException("Settings must be in key-value pairs", $context);
+            throw new ConfigException('Settings must be in key-value pairs', $context);
         }
 
         return $saveData;

@@ -10,10 +10,11 @@
  * php version 8.0.13
  *
  * @category API
- * @package  DiamondDatas
+ *
  * @author   DiamondStrider1 <62265561+Swift-Strider@users.noreply.github.com>
  * @license  The Unlicense
- * @link     https://github.com/Swift-Strider/DiamondVirions
+ *
+ * @see     https://github.com/Swift-Strider/DiamondVirions
  */
 
 declare(strict_types=1);
@@ -31,18 +32,18 @@ class ConfigException extends Exception
 
     private static function getPrettyMessage(string $message, ?ConfigContext $context): string
     {
-        $dashes = str_repeat("-", 15);
-        $message = "$dashes ConfigException: $message $dashes";
+        $dashes = str_repeat('-', 15);
+        $message = "{$dashes} ConfigException: {$message} {$dashes}";
 
         if ($context) {
             $headerLen = \strlen($message);
             $file = $context->getFile();
-            $prettyFile = "<pocketmine_server>" . substr($file, strrpos($file, "plugin_data", -1) - 1);
-            $message .= "\n  Error in file \"$prettyFile\"\n";
+            $prettyFile = '<pocketmine_server>'.substr($file, strrpos($file, 'plugin_data', -1) - 1);
+            $message .= "\n  Error in file \"{$prettyFile}\"\n";
             if ($context->getDepth() > 0) {
                 $message .= "  This occurred at the key \"{$context->getNestedKeys()}\"\n";
             }
-            $message .= str_repeat("-", $headerLen);
+            $message .= str_repeat('-', $headerLen);
         }
 
         return $message;

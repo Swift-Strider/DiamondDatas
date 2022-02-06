@@ -10,10 +10,11 @@
  * php version 8.0.13
  *
  * @category Annotations
- * @package  DiamondDatas
+ *
  * @author   DiamondStrider1 <62265561+Swift-Strider@users.noreply.github.com>
  * @license  The Unlicense
- * @link     https://github.com/Swift-Strider/DiamondVirions
+ *
+ * @see     https://github.com/Swift-Strider/DiamondVirions
  */
 
 declare(strict_types=1);
@@ -36,8 +37,8 @@ class ListType implements IValueType
     private IValueType $type;
 
     public function __construct(
-        private string $config_key = "<root>",
-        private string $description = ""
+        private string $config_key = '<root>',
+        private string $description = ''
     ) {
     }
 
@@ -59,39 +60,43 @@ class ListType implements IValueType
     public function shortString(mixed $value): string
     {
         if (!\is_array($value)) {
-            return "NOT SET";
+            return 'NOT SET';
         }
-        return "List [...]";
+
+        return 'List [...]';
     }
 
     public function yamlLines(mixed $value, ConfigContext $context): string
     {
         if (!(\is_array($value) && array_values($value) === $value)) {
-            throw new TypeError("\$value must be an array-list");
+            throw new TypeError('$value must be an array-list');
         }
         $lines = "\n";
         foreach ($value as $i => $v) {
             $newContext = $context->addKey($i);
             $valueLines = rtrim($this->type->yamlLines($v, $newContext));
-            $padding = str_repeat("  ", $context->getDepth());
-            $lines .= "$padding - $valueLines\n";
+            $padding = str_repeat('  ', $context->getDepth());
+            $lines .= "{$padding} - {$valueLines}\n";
         }
-        if ($lines === "\n") {
-            return "[]";
+        if ("\n" === $lines) {
+            return '[]';
         }
+
         return $lines;
     }
 
     public function fromRaw(mixed $raw, ConfigContext $context): mixed
     {
         if (!\is_array($raw)) {
-            throw new ConfigException("Expected key pair values", $context);
+            throw new ConfigException('Expected key pair values', $context);
         }
+
         /** @var array<int, T> */
         $array = [];
         foreach ($raw as $i => $value) {
             $array[] = $this->type->fromRaw($value, $context->addKey($i));
         }
+
         return $array;
     }
 }

@@ -10,10 +10,11 @@
  * php version 8.0.13
  *
  * @category Internal
- * @package  DiamondDatas
+ *
  * @author   DiamondStrider1 <62265561+Swift-Strider@users.noreply.github.com>
  * @license  The Unlicense
- * @link     https://github.com/Swift-Strider/DiamondVirions
+ *
+ * @see     https://github.com/Swift-Strider/DiamondVirions
  */
 
 declare(strict_types=1);
@@ -29,12 +30,16 @@ use DiamondStrider1\DiamondDatas\ConfigContext;
 interface IValueType
 {
     public function getKey(): string;
+
     public function getDescription(): string;
+
     public function shortString(mixed $value): string;
+
     /**
      * @param T $value
      */
     public function yamlLines(mixed $value, ConfigContext $context): string;
+
     /**
      * @return T
      */
