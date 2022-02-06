@@ -6,11 +6,6 @@ parameters:
 			path: src/DiamondStrider1/DiamondDatas/ClassInfo.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$inject contains generic class DiamondStrider1\\\\DiamondDatas\\\\attributes\\\\ListType but does not specify its types\\: T$#"
-			count: 1
-			path: src/DiamondStrider1/DiamondDatas/ClassInfo.php
-
-		-
 			message: "#^PHPDoc tag @var for variable \\$inject contains generic interface DiamondStrider1\\\\DiamondDatas\\\\attributes\\\\IValueType but does not specify its types\\: T$#"
 			count: 1
 			path: src/DiamondStrider1/DiamondDatas/ClassInfo.php
@@ -34,6 +29,11 @@ parameters:
 			message: "#^Method DiamondStrider1\\\\DiamondDatas\\\\attributes\\\\ListType\\:\\:setType\\(\\) has parameter \\$type with generic interface DiamondStrider1\\\\DiamondDatas\\\\attributes\\\\IValueType but does not specify its types\\: T$#"
 			count: 1
 			path: src/DiamondStrider1/DiamondDatas/attributes/ListType.php
+
+		-
+			message: "#^Method DiamondStrider1\\\\DiamondDatas\\\\attributes\\\\ObjectType\\:\\:fromRaw\\(\\) should return T of object but returns \\(DiamondStrider1\\\\DiamondDatas\\\\metadata\\\\IValidationProvider&T of object\\)\\|T of object\\.$#"
+			count: 1
+			path: src/DiamondStrider1/DiamondDatas/attributes/ObjectType.php
 
 		-
 			message: "#^PHPDoc tag @var for variable \\$inject contains generic interface DiamondStrider1\\\\DiamondDatas\\\\attributes\\\\IValueType but does not specify its types\\: T$#"

@@ -43,7 +43,7 @@ class ObjectType implements IValueType
      * @phpstan-param class-string<T> $class
      */
     public function __construct(
-        private string $class,
+        string $class,
         private string $config_key = '<root>',
         private string $description = ''
     ) {
@@ -140,7 +140,7 @@ class ObjectType implements IValueType
 
             return (new self($sub))->fromRaw($raw['options'], $context->addKey('options'));
         }
-        $object = new $this->class();
+        $object = $this->classInfo->createWithoutConstructor();
         foreach ($this->classInfo->getProps() as [$rProp, $inject]) {
             // @var ReflectionProperty $rProp
             /** @var IValueType $inject */
@@ -160,7 +160,6 @@ class ObjectType implements IValueType
         if ($object instanceof IValidationProvider) {
             $object->validate($context);
         }
-        // @var T $object
         return $object;
     }
 }

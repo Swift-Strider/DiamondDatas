@@ -91,7 +91,7 @@ class ClassInfo
             if (null === $inject) {
                 continue;
             }
-            // @var IValueType $inject
+            /** @var IValueType $inject */
             $this->props[] = [$rProp, $inject];
         }
         if ($this->reflection->implementsInterface(IDefaultProvider::class)) {
@@ -116,6 +116,12 @@ class ClassInfo
         }
         // @var self<V> $classInfo
         return $classInfo;
+    }
+
+    /** @phpstan-return T */
+    public function createWithoutConstructor(): object
+    {
+        return $this->reflection->newInstanceWithoutConstructor();
     }
 
     /** @phpstan-return class-string<T>[]|null */
